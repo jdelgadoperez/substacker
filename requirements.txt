@@ -2,7 +2,3 @@
 requests>=2.31.0
 beautifulsoup4>=4.12.0
 python-dotenv>=1.0.0
-
-# Optional dependencies for Notion integration
-# Uncomment if using Notion features
-# notion-client>=2.0.0

@@ -21,9 +21,6 @@ HEADERS = {
     "Cookie": os.getenv("SUBSTACK_COOKIE", ""),  # Load from environment variable
 }
 
-NOTION_TOKEN = os.getenv("NOTION_TOKEN")
-DATABASE_ID = os.getenv("NOTION_DATABASE_ID")
-
 # Target URL - dynamically generated from SUBSTACK_USER
 SUBSTACK_USER = os.getenv("SUBSTACK_USER", "")
 if SUBSTACK_USER:

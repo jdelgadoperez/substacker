@@ -166,11 +166,7 @@ scrape/substack/
 
 Required:
 - `SUBSTACK_COOKIE` - Your Substack session cookie
-
-Optional:
-- `SUBSTACK_USER` - Your username
-- `NOTION_TOKEN` - Notion API token (for exports)
-- `DATABASE_ID` - Notion database ID
+- `SUBSTACK_USER` - Your Substack username
 
 See [ENV_CONFIGURATION.md](ENV_CONFIGURATION.md) for details.
 

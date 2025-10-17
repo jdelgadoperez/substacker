@@ -387,22 +387,6 @@ python substack_reads.py --no-parallel
 
 ## Integration Examples
 
-### With Notion (substack_reads_notion.py)
-
-The CLI can be used as a foundation for the Notion integration:
-
-```python
-# In your script
-import subprocess
-result = subprocess.run([
-    'python', 'substack_reads.py',
-    '--metadata',
-    '--exports-folder', 'temp_exports'
-], capture_output=True)
-
-# Then load the JSON and upload to Notion
-```
-
 ### With Git Automation
 
 ```bash

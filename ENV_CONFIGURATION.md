@@ -33,10 +33,6 @@ Edit `.env` and fill in your actual values:
 # Substack Configuration (Required)
 SUBSTACK_USER="@your_username"
 SUBSTACK_COOKIE="your_actual_cookie_here"
-
-# Notion Integration (Optional)
-NOTION_TOKEN="your_notion_token"
-DATABASE_ID="your_database_id"
 ```
 
 ## Getting Your Substack Cookie
@@ -105,8 +101,6 @@ Cookies expire after some time. If the scraper stops working:
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `SUBSTACK_USER` | Your Substack username | `@yourusername` |
-| `NOTION_TOKEN` | Notion API integration token | `secret_...` |
-| `DATABASE_ID` | Notion database ID for exports | `abc123...` |
 
 ## Security Best Practices
 
