@@ -229,8 +229,9 @@ load_dotenv('.env.dev')
 
 ## Migration Notes
 
-### Before (Hardcoded)
+### Why Environment Variables?
 
+**Hardcoded Approach** (not recommended):
 ```python
 HEADERS = {
     "Cookie": "hardcoded_cookie_value_here"
@@ -243,8 +244,7 @@ HEADERS = {
 - Hard to rotate
 - Security risk
 
-### After (Environment Variable)
-
+**Environment Variable Approach** (recommended):
 ```python
 HEADERS = {
     "Cookie": os.getenv("SUBSTACK_COOKIE", "")

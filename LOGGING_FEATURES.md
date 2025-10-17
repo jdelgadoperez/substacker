@@ -250,7 +250,7 @@ The logging system has **minimal performance impact**:
 
 ## Future Enhancements
 
-Potential improvements:
+Potential future features:
 - JSON-formatted logging for log aggregation
 - Rotating log files
 - Remote logging (syslog, cloud logging)

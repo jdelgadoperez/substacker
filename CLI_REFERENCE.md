@@ -409,7 +409,7 @@ python substack_reads.py --exports-folder ./analysis/data
 
 ## Future Enhancements
 
-Potential CLI improvements:
+Potential CLI additions:
 - [ ] Config file support (`.substackrc`)
 - [ ] Environment variable support
 - [ ] Interactive mode

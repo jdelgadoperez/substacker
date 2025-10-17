@@ -21,23 +21,37 @@ A powerful, production-ready Python scraper for extracting and analyzing your Su
 
 ## Quick Start
 
+**New to this?** Check out the [Complete Beginner's Guide](GETTING_STARTED.md) for detailed setup instructions with screenshots.
+
 ### 1. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Configure Environment
+### 2. Get Your Substack Cookie
+
+You'll need your browser's Substack session cookie. See the [detailed cookie guide](GETTING_STARTED.md#getting-your-substack-cookie) for step-by-step instructions for Chrome, Firefox, and Safari.
+
+**Quick method:**
+
+1. Log into [substack.com](https://substack.com)
+2. Press `F12` → Network tab
+3. Refresh page, click any request
+4. Copy the `Cookie` header value
+
+### 3. Configure Environment
 
 ```bash
 # Copy example environment file
 cp .env.example .env
 
-# Edit .env and add your Substack cookie
-# See ENV_CONFIGURATION.md for detailed instructions
+# Edit .env and add your cookie
+SUBSTACK_USER="@yourusername"
+SUBSTACK_COOKIE="paste_your_cookie_here"
 ```
 
-### 3. Run the Scraper
+### 4. Run the Scraper
 
 ```bash
 # Basic usage
@@ -52,12 +66,12 @@ python substack_reads.py --quiet --log-file scraper.log
 
 ## Documentation
 
-- **[Environment Configuration](ENV_CONFIGURATION.md)** - Setting up credentials and API tokens
+- **[Getting Started Guide](GETTING_STARTED.md)** - Complete beginner's guide with cookie setup instructions
+- **[Environment Configuration](ENV_CONFIGURATION.md)** - Setting up credentials and environment variables
 - **[CLI Reference](CLI_REFERENCE.md)** - Complete command-line reference (30+ options)
 - **[Logging Features](LOGGING_FEATURES.md)** - Logging levels, progress bars, file logging
-- **[Performance Improvements](PERFORMANCE_IMPROVEMENTS.md)** - Parallel downloads, caching, optimization
+- **[Performance Features](PERFORMANCE_FEATURES.md)** - Parallel downloads, caching, optimization
 - **[Data Quality Features](DATA_QUALITY_FEATURES.md)** - Validation, duplicate detection, reports
-- **[Refactoring Summary](REFACTORING_SUMMARY.md)** - Modular architecture details
 
 ## Common Usage Examples
 
@@ -118,15 +132,15 @@ images/
 
 ```json
 {
-  "name": "Tech Newsletter",
-  "author": "John Doe",
-  "link": "https://technewsletter.substack.com",
-  "icon": "/absolute/path/to/icon.jpg",
-  "is_paid": false,
-  "subscription_status": "Subscribed",
-  "description": "Weekly tech insights...",
-  "subscriber_info": "10,000 subscribers",
-  "labels": ["tech", "free", "subscribed"]
+	"name": "Tech Newsletter",
+	"author": "John Doe",
+	"link": "https://technewsletter.substack.com",
+	"icon": "/absolute/path/to/icon.jpg",
+	"is_paid": false,
+	"subscription_status": "Subscribed",
+	"description": "Weekly tech insights...",
+	"subscriber_info": "10,000 subscribers",
+	"labels": ["tech", "free", "subscribed"]
 }
 ```
 
@@ -154,17 +168,18 @@ scrape/substack/
 
 ### Key Benefits
 
-- **82% reduction** in main script size (1,248 → 222 lines)
+- **Lightweight main script**: 222 lines (orchestration only)
 - **9 focused modules** averaging ~100 lines each
-- **100% backward compatibility**
-- **Zero performance impact**
-- **Dramatically improved maintainability**
+- **Clear separation of concerns**
+- **High reusability and testability**
+- **Easy to extend and maintain**
 
 ## Configuration
 
 ### Environment Variables
 
 Required:
+
 - `SUBSTACK_COOKIE` - Your Substack session cookie
 - `SUBSTACK_USER` - Your Substack username
 
@@ -173,12 +188,14 @@ See [ENV_CONFIGURATION.md](ENV_CONFIGURATION.md) for details.
 ### CLI Flags
 
 **Features:**
+
 - `--metadata` - Extract rich metadata (descriptions, subscriber counts)
 - `--no-images` - Skip image downloads
 - `--no-validate` - Skip data validation
 - `--no-content-analysis` - Skip content analysis for labeling
 
 **Performance:**
+
 - `--workers N` - Number of parallel workers (default: 5)
 - `--no-parallel` - Disable parallel downloads
 - `--no-cache` - Disable content caching
@@ -187,12 +204,14 @@ See [ENV_CONFIGURATION.md](ENV_CONFIGURATION.md) for details.
 - `--delay N` - Rate limit delay in seconds
 
 **Logging:**
+
 - `--log-level LEVEL` - DEBUG, INFO, WARNING, ERROR, CRITICAL
 - `--log-file PATH` - Write logs to file
 - `--quiet` - Minimal output (errors only)
 - `--detailed` - Show full publication list
 
 **Labels:**
+
 - `--include-labels tech,business` - Whitelist labels
 - `--exclude-labels free,unsubscribed` - Blacklist labels
 
@@ -202,11 +221,11 @@ See [CLI_REFERENCE.md](CLI_REFERENCE.md) for complete reference.
 
 ### Benchmarks
 
-| Feature | Baseline | Optimized | Improvement |
-|---------|----------|-----------|-------------|
-| Image Downloads | 50s | 10s | **5x faster** |
-| Content Analysis (cached) | 300s | 1s | **300x faster** |
-| Partial Updates | 100% time | 10% time | **90% faster** |
+| Feature                   | Baseline  | Optimized | Improvement     |
+| ------------------------- | --------- | --------- | --------------- |
+| Image Downloads           | 50s       | 10s       | **5x faster**   |
+| Content Analysis (cached) | 300s      | 1s        | **300x faster** |
+| Partial Updates           | 100% time | 10% time  | **90% faster**  |
 
 ### Optimization Features
 
@@ -215,7 +234,7 @@ See [CLI_REFERENCE.md](CLI_REFERENCE.md) for complete reference.
 3. **Skip Logic**: Skip already-labeled publications and cached images
 4. **Rate Limiting**: Configurable delays to avoid overwhelming servers
 
-See [PERFORMANCE_IMPROVEMENTS.md](PERFORMANCE_IMPROVEMENTS.md) for details.
+See [PERFORMANCE_FEATURES.md](PERFORMANCE_FEATURES.md) for details.
 
 ## Data Quality
 
@@ -280,6 +299,7 @@ See [DATA_QUALITY_FEATURES.md](DATA_QUALITY_FEATURES.md) for details.
 **Problem**: Scraping takes too long
 
 **Solutions**:
+
 - Increase workers: `--workers 10`
 - Enable caching: Remove `--no-cache`
 - Use parallel downloads: Remove `--no-parallel`
@@ -289,6 +309,7 @@ See [DATA_QUALITY_FEATURES.md](DATA_QUALITY_FEATURES.md) for details.
 **Problem**: Getting 429 errors
 
 **Solutions**:
+
 - Reduce workers: `--workers 2`
 - Add delay: `--delay 2.0`
 - Use sequential downloads: `--no-parallel`
@@ -309,6 +330,7 @@ Substacker uses a sophisticated multi-layered labeling system:
 ### Categorization Features
 
 1. **Multi-Source Analysis**:
+
    - Publication name (3 points)
    - Author bio from known authors database (4 points)
    - URL structure (2 points)
@@ -318,6 +340,7 @@ Substacker uses a sophisticated multi-layered labeling system:
 2. **40+ Categories**: tech, ai, crypto, startups, business, finance, marketing, news, politics, culture, law, health, science, writing, music, and more
 
 3. **Smart Matching**:
+
    - Word boundary detection (prevents false positives)
    - Multi-word phrase support
    - Case-insensitive matching
@@ -347,9 +370,7 @@ MIT License - see LICENSE file for details
 
 ## Version History
 
-- **v2.0.0** - Modular refactoring, logging system, environment configuration
-- **v1.5.0** - Performance improvements, caching, parallel downloads
-- **v1.0.0** - Initial release with basic scraping
+- **v1.0.0** - Initial public release with intelligent categorization, modular architecture, and performance optimizations
 
 ---
 

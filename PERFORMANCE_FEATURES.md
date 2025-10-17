@@ -1,10 +1,10 @@
-# Performance Improvements
+# Performance Features
 
-This document outlines the performance enhancements added to the Substack scraper.
+This document outlines the performance optimizations built into Substacker.
 
 ## Overview
 
-The scraper now includes three major performance optimizations that significantly reduce execution time, especially on repeated runs:
+Substacker includes three major performance features that significantly reduce execution time, especially on repeated runs:
 
 1. **Parallel Image Downloads** - Download multiple images concurrently
 2. **Content Analysis Caching** - Cache analyzed content to avoid re-fetching
@@ -28,14 +28,11 @@ publications = scrape_substack_reads(
 )
 ```
 
-### Performance Impact
-**Before**: ~2 seconds per image (sequential)
-- 50 images = ~100 seconds
-
-**After**: ~2 seconds total (parallel with 5 workers)
-- 50 images = ~20 seconds
-
-**Speedup**: ~5x faster for image downloads
+### Benefits
+- Downloads 5+ images simultaneously
+- Configurable worker count (default: 5)
+- ~5x faster than sequential downloads
+- Automatically detects cached images
 
 ### Output Example
 ```
@@ -73,14 +70,11 @@ metadata = extract_metadata(url, use_cache=True)
 metadata = extract_metadata(url, use_cache=False)
 ```
 
-### Performance Impact
-**Before**: ~2-5 seconds per publication for content analysis
-- 50 publications = ~150 seconds
-
-**After (cached)**: <0.01 seconds per publication
-- 50 publications = ~0.5 seconds
-
-**Speedup**: ~300x faster on cached runs
+### Benefits
+- Instant retrieval of previously analyzed content
+- 7-day expiry (configurable)
+- ~300x faster on repeat runs
+- Reduces server load
 
 ### Output Example
 ```
@@ -131,14 +125,11 @@ auto_label_publications(
 2. If labels exist and not empty, skips content fetching
 3. Useful for incremental updates or re-runs
 
-### Performance Impact
-**Before**: Always analyzes all publications
-- 50 publications = full content fetch
-
-**After (with existing labels)**: Only analyzes new/unlabeled publications
-- 45 labeled + 5 new = only 5 fetched
-
-**Speedup**: 90% reduction in content fetches for partial updates
+### Benefits
+- Only analyzes new/unlabeled publications
+- Ideal for daily updates
+- Significantly faster on subsequent runs
+- Preserves manually added labels
 
 ### Output Example
 ```
@@ -148,28 +139,12 @@ Analyzing publication 3/45: New Newsletter
   Fetching content from https://...
 ```
 
-## Combined Performance Impact
+## Performance Characteristics
 
-### Scenario 1: First Run (Cold)
-```
-Images:    100s → 20s    (5x faster)
-Content:   150s → 150s   (same, must fetch)
-Total:     250s → 170s   (1.5x faster)
-```
-
-### Scenario 2: Second Run (Warm Cache)
-```
-Images:    100s → 2s     (50x faster, all cached)
-Content:   150s → 0.5s   (300x faster, all cached)
-Total:     250s → 2.5s   (100x faster!)
-```
-
-### Scenario 3: Partial Update (5 new out of 50)
-```
-Images:    10s → 2s      (5x faster)
-Content:   15s → 0.5s    (30x faster, 45 cached + 5 new)
-Total:     25s → 2.5s    (10x faster)
-```
+- **First run**: Normal speed as cache builds
+- **Subsequent runs**: Dramatically faster with cache hits
+- **Incremental updates**: Only processes new publications
+- **Typical speedup**: 10-100x depending on cache hit rate
 
 ## Configuration Examples
 

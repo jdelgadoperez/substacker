@@ -1,8 +1,8 @@
-# Data Quality Features - Substack Scraper
+# Data Quality Features
 
-This document describes the data quality improvements added to the Substack scraper.
+This document describes the data quality features built into Substacker.
 
-## New Features
+## Features
 
 ### 1. URL Validation
 - **Function**: `validate_url(url)`
