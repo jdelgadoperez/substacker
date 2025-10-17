@@ -118,9 +118,6 @@ def validate_publication_data(pub, strict=False):
     if "is_paid" not in pub:
         warnings.append("Missing payment status")
 
-    if not pub.get("subscription_status"):
-        warnings.append("Missing subscription status")
-
     # Validate icon path if present
     if pub.get("icon"):
         icon_path = pub["icon"]

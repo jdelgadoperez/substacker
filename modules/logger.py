@@ -107,6 +107,7 @@ class ProgressBar:
         self.description = description
         self.width = width
         self.logger = get_logger(__name__)
+        self.last_line_length = 0  # Track last line length to clear properly
 
     def update(self, n: int = 1, status: str = ""):
         """
@@ -125,10 +126,22 @@ class ProgressBar:
         filled = int(self.width * progress)
         bar = "█" * filled + "░" * (self.width - filled)
 
-        # Build status line
+        # Build status line - truncate status to prevent line wrapping
         percent = progress * 100
-        status_msg = f" {status}" if status else ""
+        if status:
+            # Limit status to 40 characters to prevent overflow
+            status = status[:40]
+            status_msg = f" {status}"
+        else:
+            status_msg = ""
+
         line = f"\r{self.description} |{bar}| {self.current}/{self.total} ({percent:.1f}%){status_msg}"
+
+        # Pad with spaces to clear previous line if it was longer
+        if len(line) < self.last_line_length:
+            line += " " * (self.last_line_length - len(line))
+
+        self.last_line_length = len(line)
 
         # Print without newline
         sys.stdout.write(line)

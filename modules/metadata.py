@@ -13,6 +13,34 @@ from .logger import get_logger
 logger = get_logger(__name__)
 
 
+def search_author_info(author_name, publication_name=""):
+    """
+    Search for author information using web search as fallback.
+    Returns a brief bio/description if found.
+    """
+    if not author_name or len(author_name) < 3:
+        return ""
+
+    try:
+        # Clean author name (remove "by" prefix)
+        clean_name = author_name.replace("by ", "").strip()
+
+        # Try Wikipedia/public info search
+        search_query = f"{clean_name} {publication_name} bio" if publication_name else f"{clean_name} who is"
+
+        # For now, we'll use a simple approach - try to fetch from a search
+        # In production, you could use Google Custom Search API or similar
+        logger.debug(f"Would search for: {search_query}")
+
+        # TODO: Implement actual web search here if needed
+        # For now, return empty to avoid making external API calls
+        return ""
+
+    except Exception as e:
+        logger.debug(f"Error searching for author info: {e}")
+        return ""
+
+
 def extract_metadata(
     url, max_retries=None, timeout=None, rate_limit_delay=None, use_cache=True
 ):

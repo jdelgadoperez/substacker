@@ -14,7 +14,6 @@ def generate_data_quality_report(publications):
         "field_coverage": {},
         "validation_summary": {"valid": 0, "warnings": 0, "errors": 0},
         "payment_breakdown": {"paid": 0, "free": 0, "unknown": 0},
-        "subscription_breakdown": {},
     }
 
     all_fields = set()
@@ -46,11 +45,6 @@ def generate_data_quality_report(publications):
         else:
             report["payment_breakdown"]["unknown"] += 1
 
-        status = pub.get("subscription_status", "Unknown")
-        report["subscription_breakdown"][status] = (
-            report["subscription_breakdown"].get(status, 0) + 1
-        )
-
     return report
 
 
@@ -72,13 +66,6 @@ def print_data_quality_report(report):
     if unknown > 0:
         print(f"  Unknown: {unknown:3d} ({unknown/total*100:.1f}%)")
 
-    print("\n--- Subscription Status ---")
-    for status, count in sorted(
-        report["subscription_breakdown"].items(), key=lambda x: x[1], reverse=True
-    ):
-        pct = count / total * 100
-        print(f"  {status:20s}: {count:3d} ({pct:.1f}%)")
-
     print("\n--- Field Coverage ---")
     key_fields = [
         "name",
@@ -86,7 +73,6 @@ def print_data_quality_report(report):
         "author",
         "icon",
         "is_paid",
-        "subscription_status",
         "description",
         "labels",
     ]
@@ -114,5 +100,4 @@ def print_results(publications):
         if pub.get("icon"):
             print(f"   Icon: {pub.get('icon')}")
         print(f"   Paid: {'Yes' if pub.get('is_paid') else 'No'}")
-        print(f"   Status: {pub.get('subscription_status', 'N/A')}")
         print()

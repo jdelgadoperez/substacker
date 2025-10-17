@@ -92,10 +92,6 @@ def scrape_substack_reads(
                 is_paid = svg_badge is not None
             pub_data["is_paid"] = is_paid
 
-            button_elem = link.find("button")
-            if button_elem:
-                pub_data["subscription_status"] = button_elem.get_text(strip=True)
-
             # Extract rich metadata if requested
             if extract_rich_metadata and pub_data.get("link"):
                 logger.debug(
