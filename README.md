@@ -1,13 +1,18 @@
-# Substack Reads Scraper
+# Substacker
 
-A powerful, production-ready Python scraper for extracting and analyzing your Substack subscriptions.
+A powerful, production-ready Python scraper for extracting and analyzing your Substack subscriptions with intelligent categorization.
 
 ## Features
 
 - ✅ **Comprehensive Data Extraction**: Names, authors, URLs, icons, payment status, metadata
 - ✅ **Smart Caching**: Content analysis caching with 7-day expiry (300x speedup)
 - ✅ **Parallel Downloads**: 5x faster image downloads with configurable workers
-- ✅ **Auto-Labeling**: Intelligent categorization (tech, business, news, etc.)
+- ✅ **Intelligent Auto-Labeling**:
+  - Multi-source analysis (name, author, URL, content, known authors)
+  - Weighted scoring system (4-point scale)
+  - 40+ keyword categories with expanded vocabulary
+  - Known authors database for accurate categorization
+  - Fallback strategies for minimal-content publications
 - ✅ **Data Validation**: URL validation, duplicate detection, quality reports
 - ✅ **Multiple Export Formats**: JSON and CSV exports
 - ✅ **Progress Tracking**: Visual progress bars for all operations
@@ -301,9 +306,48 @@ The codebase is modular and well-documented. To add features:
 3. Update relevant documentation
 4. Test with `--log-level DEBUG`
 
+## Auto-Labeling System
+
+Substacker uses a sophisticated multi-layered labeling system:
+
+### Categorization Features
+
+1. **Multi-Source Analysis**:
+   - Publication name (3 points)
+   - Author bio from known authors database (4 points)
+   - URL structure (2 points)
+   - Page content (1.5 points)
+   - Author field (1 point)
+
+2. **40+ Categories**: tech, ai, crypto, startups, business, finance, marketing, news, politics, culture, law, health, science, writing, music, and more
+
+3. **Smart Matching**:
+   - Word boundary detection (prevents false positives)
+   - Multi-word phrase support
+   - Case-insensitive matching
+
+4. **Known Authors Database**: Pre-configured information for notable authors (easily extensible in `definitions.py`)
+
+5. **Fallback Strategies**: Contextual inference for publications with minimal metadata
+
+### Example Results
+
+```json
+{
+  "name": "Davey Havok",
+  "author": "by Davey Havok",
+  "labels": ["music", "music-focused", "paid"]
+},
+{
+  "name": "Legally Trans",
+  "author": "by Chase Strangio",
+  "labels": ["culture", "culture-focused", "law", "law-focused", "paid", "politics"]
+}
+```
+
 ## License
 
-[Add your license here]
+MIT License - see LICENSE file for details
 
 ## Version History
 

@@ -31,6 +31,10 @@ wheels/
 exports/
 images/
 
+# Logs
+*.log
+logs/
+
 # IDE
 .vscode/
 .idea/
