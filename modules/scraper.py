@@ -63,7 +63,9 @@ def scrape_substack_reads(
 
             author_elem = link.find("div", class_=re.compile(r"weight-regular-\w+"))
             if author_elem:
-                pub_data["author"] = author_elem.get_text(strip=True)
+                author_text = author_elem.get_text(strip=True)
+                # Remove "by " prefix if present
+                pub_data["author"] = author_text.replace("by ", "", 1).strip()
 
             icon_elem = link.find("img")
             if icon_elem and icon_elem.get("src"):

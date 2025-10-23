@@ -354,12 +354,12 @@ Substacker uses a sophisticated multi-layered labeling system:
 ```json
 {
   "name": "Davey Havok",
-  "author": "by Davey Havok",
+  "author": "Davey Havok",
   "labels": ["music", "music-focused", "paid"]
 },
 {
   "name": "Legally Trans",
-  "author": "by Chase Strangio",
+  "author": "Chase Strangio",
   "labels": ["culture", "culture-focused", "law", "law-focused", "paid", "politics"]
 }
 ```

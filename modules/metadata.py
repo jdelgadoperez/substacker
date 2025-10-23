@@ -22,11 +22,8 @@ def search_author_info(author_name, publication_name=""):
         return ""
 
     try:
-        # Clean author name (remove "by" prefix)
-        clean_name = author_name.replace("by ", "").strip()
-
         # Try Wikipedia/public info search
-        search_query = f"{clean_name} {publication_name} bio" if publication_name else f"{clean_name} who is"
+        search_query = f"{author_name} {publication_name} bio" if publication_name else f"{author_name} who is"
 
         # For now, we'll use a simple approach - try to fetch from a search
         # In production, you could use Google Custom Search API or similar

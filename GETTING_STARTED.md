@@ -292,7 +292,7 @@ Each publication has this structure:
 ```json
 {
 	"name": "Tech Newsletter",
-	"author": "by Jane Doe",
+	"author": "Jane Doe",
 	"link": "https://technewsletter.substack.com",
 	"icon": "/path/to/image.png",
 	"is_paid": false,

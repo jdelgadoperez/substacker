@@ -117,7 +117,7 @@ def auto_label_publications(
         }
 
         # Check for known author information
-        author_name = pub.get("author", "").lower().replace("by ", "").strip()
+        author_name = pub.get("author", "").lower().strip()
         if author_name in KNOWN_AUTHORS:
             text_sources['author_bio'] = " ".join(KNOWN_AUTHORS[author_name])
             logger.debug(f"  Found known author: {author_name} → {text_sources['author_bio']}")
@@ -171,9 +171,7 @@ def auto_label_publications(
 
             # Check for personal newsletters (name matches author)
             if author_lower and name_lower:
-                # Extract name from "by Author Name" format
-                author_name = author_lower.replace("by ", "").strip()
-                if author_name in name_lower:
+                if author_lower in name_lower:
                     labels.append("writing")
                     logger.debug(f"  Fallback: Added 'writing' (personal newsletter)")
 
