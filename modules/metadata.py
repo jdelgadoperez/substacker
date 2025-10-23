@@ -13,10 +13,110 @@ from .logger import get_logger
 logger = get_logger(__name__)
 
 
+def extract_author_profile_url(publication_url):
+    """
+    Extract author profile URL from a publication URL.
+    Examples:
+      https://pinkshift.substack.com → https://substack.com/@pinkshift
+      https://technewsletter.substack.com → https://substack.com/@technewsletter
+    """
+    if not publication_url:
+        return None
+
+    try:
+        # Parse the publication URL to extract subdomain
+        match = re.match(r'https?://([^.]+)\.substack\.com', publication_url)
+        if match:
+            subdomain = match.group(1)
+            return f"https://substack.com/@{subdomain}"
+        return None
+    except Exception as e:
+        logger.debug(f"Error extracting author profile URL: {e}")
+        return None
+
+
+def fetch_author_bio(author_profile_url, max_retries=2, timeout=None, rate_limit_delay=None):
+    """
+    Fetch author bio/description from their Substack profile page.
+    Returns the author's bio text if found.
+    """
+    if not author_profile_url:
+        return ""
+
+    # Use config defaults if not specified
+    if timeout is None:
+        timeout = Config.timeout
+    if rate_limit_delay is None:
+        rate_limit_delay = Config.rate_limit_delay
+
+    from definitions import HEADERS
+
+    for attempt in range(max_retries):
+        try:
+            time.sleep(rate_limit_delay)
+            response = requests.get(author_profile_url, headers=HEADERS, timeout=timeout)
+            response.raise_for_status()
+
+            soup = BeautifulSoup(response.content, "html.parser")
+
+            # Try to extract author bio from various locations
+            bio_text = ""
+
+            # Method 1: Look for meta description
+            meta_desc = soup.find("meta", attrs={"name": "description"})
+            if meta_desc and meta_desc.get("content"):
+                bio_text = meta_desc["content"].strip()
+
+            # Method 2: Look for og:description
+            if not bio_text:
+                og_desc = soup.find("meta", property="og:description")
+                if og_desc and og_desc.get("content"):
+                    bio_text = og_desc["content"].strip()
+
+            # Method 3: Look for profile description/bio sections
+            if not bio_text:
+                # Look for common bio containers
+                bio_selectors = [
+                    '[class*="bio"]',
+                    '[class*="description"]',
+                    '[class*="about"]',
+                    '[class*="profile-description"]',
+                ]
+                for selector in bio_selectors:
+                    elem = soup.select_one(selector)
+                    if elem:
+                        text = elem.get_text(strip=True)
+                        if len(text) > 20:  # Ensure it's substantial
+                            bio_text = text[:500]
+                            break
+
+            # Method 4: Extract from page title and first paragraph
+            if not bio_text:
+                title = soup.find("title")
+                if title:
+                    bio_text = title.get_text(strip=True)
+
+            logger.debug(f"Extracted author bio ({len(bio_text)} chars): {bio_text[:100]}...")
+            return bio_text
+
+        except requests.exceptions.Timeout:
+            if attempt < max_retries - 1:
+                logger.debug(f"Timeout fetching author profile, retrying ({attempt + 1}/{max_retries})...")
+                continue
+            else:
+                logger.warning(f"Timeout after {max_retries} attempts for {author_profile_url}")
+        except Exception as e:
+            logger.debug(f"Error fetching author bio from {author_profile_url}: {e}")
+            break
+
+    return ""
+
+
 def search_author_info(author_name, publication_name=""):
     """
     Search for author information using web search as fallback.
     Returns a brief bio/description if found.
+    (Deprecated: Use fetch_author_bio() for Substack author profiles)
     """
     if not author_name or len(author_name) < 3:
         return ""

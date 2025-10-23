@@ -88,7 +88,7 @@ def auto_label_publications(
     publications, analyze_content=True, skip_if_labeled=True, use_cache=True
 ):
     """Automatically assign labels based on publication characteristics"""
-    from definitions import KEYWORD_CATEGORIES, KNOWN_AUTHORS
+    from definitions import KEYWORD_CATEGORIES
 
     progress = ProgressBar(len(publications), "Labeling")
 
@@ -110,17 +110,27 @@ def auto_label_publications(
             'author_bio': ""
         }
 
-        # Check for known author information
-        author_name = pub.get("author", "").lower().strip()
-        if author_name in KNOWN_AUTHORS:
-            text_sources['author_bio'] = " ".join(KNOWN_AUTHORS[author_name])
-            logger.debug(f"  Found known author: {author_name} → {text_sources['author_bio']}")
-        else:
-            # Try first name only as fallback
-            first_name = author_name.split()[0] if author_name else ""
-            if first_name and first_name in KNOWN_AUTHORS:
-                text_sources['author_bio'] = " ".join(KNOWN_AUTHORS[first_name])
-                logger.debug(f"  Found known author by first name: {first_name} → {text_sources['author_bio']}")
+        # Fetch author bio from Substack profile
+        if analyze_content and pub.get("link"):
+            from .metadata import extract_author_profile_url, fetch_author_bio
+
+            author_profile_url = extract_author_profile_url(pub["link"])
+            if author_profile_url:
+                # Check cache for author bio
+                cached_author_bio = get_cached_metadata(f"author_bio_{author_profile_url}") if use_cache else None
+                if cached_author_bio:
+                    logger.debug(f"Using cached author bio from profile")
+                    text_sources['author_bio'] = cached_author_bio.get("bio_text", "")
+                else:
+                    logger.debug(f"Fetching author bio from profile: {author_profile_url}")
+                    bio_text = fetch_author_bio(author_profile_url)
+                    if bio_text:
+                        text_sources['author_bio'] = bio_text
+                        # Cache the author bio
+                        if use_cache:
+                            from .cache import save_cached_metadata
+                            save_cached_metadata(f"author_bio_{author_profile_url}", {"bio_text": bio_text})
+                        logger.debug(f"Author bio fetched ({len(bio_text)} chars): {bio_text[:100]}...")
 
         # Add content analysis if enabled
         if analyze_content and pub.get("link"):

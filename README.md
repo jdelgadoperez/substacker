@@ -8,10 +8,10 @@ A powerful, production-ready Python scraper for extracting and analyzing your Su
 - ✅ **Smart Caching**: Content analysis caching with 7-day expiry (300x speedup)
 - ✅ **Parallel Downloads**: 5x faster image downloads with configurable workers
 - ✅ **Intelligent Auto-Labeling**:
-  - Multi-source analysis (name, author, URL, content, known authors)
+  - Multi-source analysis (name, author, URL, content, author profiles)
   - Weighted scoring system (4-point scale)
   - 40+ keyword categories with expanded vocabulary
-  - Known authors database for accurate categorization
+  - Automatic author profile fetching from Substack
   - Fallback strategies for minimal-content publications
 - ✅ **Data Validation**: URL validation, duplicate detection, quality reports
 - ✅ **Multiple Export Formats**: JSON and CSV exports
@@ -332,7 +332,7 @@ Substacker uses a sophisticated multi-layered labeling system:
 1. **Multi-Source Analysis**:
 
    - Publication name (3 points)
-   - Author bio from known authors database (4 points)
+   - Author bio from Substack profile (4 points)
    - URL structure (2 points)
    - Page content (1.5 points)
    - Author field (1 point)
@@ -345,7 +345,7 @@ Substacker uses a sophisticated multi-layered labeling system:
    - Multi-word phrase support
    - Case-insensitive matching
 
-4. **Known Authors Database**: Pre-configured information for notable authors (easily extensible in `definitions.py`)
+4. **Automatic Author Discovery**: Fetches author bios from Substack profiles for intelligent categorization
 
 5. **Fallback Strategies**: Contextual inference for publications with minimal metadata
 
