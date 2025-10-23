@@ -101,12 +101,6 @@ def auto_label_publications(
         labels = []
         logger.debug(f"Analyzing publication: {pub.get('name', 'Unknown')}")
 
-        # Label based on payment status
-        if pub.get("is_paid"):
-            labels.append("paid")
-        else:
-            labels.append("free")
-
         # Prepare text sources dictionary
         text_sources = {
             'name': pub.get("name", ""),
@@ -162,7 +156,7 @@ def auto_label_publications(
                 labels.append(f"{category}-focused")
 
         # Fallback strategies for publications with few/no labels
-        if len(labels) <= 1:  # Only has free/paid label
+        if len(labels) == 0:  # No labels assigned yet
             logger.debug(f"  Applying fallback strategies (current labels: {labels})")
 
             # Strategy 1: Infer from publication name patterns

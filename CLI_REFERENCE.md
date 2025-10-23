@@ -114,11 +114,11 @@ python substack_reads.py --no-content-analysis
 # Only keep tech-related labels
 python substack_reads.py --include-labels tech,software,ai,startups
 
-# Exclude uninteresting labels
-python substack_reads.py --exclude-labels free,unsubscribed,following
+# Exclude certain labels
+python substack_reads.py --exclude-labels writing,culture
 
 # Both include and exclude (include applied first)
-python substack_reads.py --include-labels tech,business --exclude-labels free
+python substack_reads.py --include-labels tech,business --exclude-labels news
 ```
 
 ### Output Customization

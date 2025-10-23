@@ -43,7 +43,7 @@ Examples:
   python substack_reads.py --include-labels tech,business,startups
 
   # Exclude certain labels
-  python substack_reads.py --exclude-labels free,unsubscribed
+  python substack_reads.py --exclude-labels writing,culture
 
   # Custom output folders
   python substack_reads.py --images-folder ./icons --exports-folder ./data

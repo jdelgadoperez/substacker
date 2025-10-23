@@ -297,7 +297,7 @@ Each publication has this structure:
 	"icon": "/path/to/image.png",
 	"is_paid": false,
 	"subscription_status": "Subscribed",
-	"labels": ["tech", "free", "subscribed"]
+	"labels": ["tech"]
 }
 ```
 

@@ -140,7 +140,7 @@ images/
 	"subscription_status": "Subscribed",
 	"description": "Weekly tech insights...",
 	"subscriber_info": "10,000 subscribers",
-	"labels": ["tech", "free", "subscribed"]
+	"labels": ["tech"]
 }
 ```
 
@@ -213,7 +213,7 @@ See [ENV_CONFIGURATION.md](ENV_CONFIGURATION.md) for details.
 **Labels:**
 
 - `--include-labels tech,business` - Whitelist labels
-- `--exclude-labels free,unsubscribed` - Blacklist labels
+- `--exclude-labels writing,culture` - Blacklist labels
 
 See [CLI_REFERENCE.md](CLI_REFERENCE.md) for complete reference.
 
@@ -355,12 +355,12 @@ Substacker uses a sophisticated multi-layered labeling system:
 {
   "name": "Davey Havok",
   "author": "Davey Havok",
-  "labels": ["music", "music-focused", "paid"]
+  "labels": ["music", "music-focused"]
 },
 {
   "name": "Legally Trans",
   "author": "Chase Strangio",
-  "labels": ["culture", "culture-focused", "law", "law-focused", "paid", "politics"]
+  "labels": ["culture", "culture-focused", "law", "law-focused", "politics"]
 }
 ```
 
