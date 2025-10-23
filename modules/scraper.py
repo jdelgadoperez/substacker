@@ -48,7 +48,7 @@ def scrape_substack_reads(
         logger.info(f"Found {len(pub_links)} potential publications to scrape")
 
         # Progress bar for extraction
-        progress = ProgressBar(len(pub_links), "Extracting publications")
+        progress = ProgressBar(len(pub_links), "Extracting")
 
         # First pass: Extract all data
         for i, link in enumerate(pub_links, 1):

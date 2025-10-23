@@ -90,7 +90,7 @@ def auto_label_publications(
     """Automatically assign labels based on publication characteristics"""
     from definitions import KEYWORD_CATEGORIES, KNOWN_AUTHORS
 
-    progress = ProgressBar(len(publications), "Labeling publications")
+    progress = ProgressBar(len(publications), "Labeling")
 
     for i, pub in enumerate(publications, 1):
         if skip_if_labeled and pub.get("labels") and len(pub["labels"]) > 0:
