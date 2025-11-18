@@ -19,39 +19,109 @@ A powerful, production-ready Python scraper for extracting and analyzing your Su
 - ✅ **Professional Logging**: Colored console output, file logging, quiet mode
 - ✅ **Secure Configuration**: Environment variable management for credentials
 
-## Quick Start
+## System Requirements
 
-**New to this?** Check out the [Complete Beginner's Guide](GETTING_STARTED.md) for detailed setup instructions with screenshots.
+### Minimum Requirements
+- **Python**: 3.9 or higher (tested on 3.9, 3.10, 3.11, 3.12, 3.13)
+- **Operating System**: Windows, macOS, or Linux
+- **Disk Space**: ~50MB for dependencies + storage for images/exports
+- **Internet**: Required for scraping and downloading
 
-### 1. Install Dependencies
+### Dependencies
+- `requests` (2.31.0+) - HTTP library for web scraping
+- `beautifulsoup4` (4.12.0+) - HTML parsing
+- `python-dotenv` (1.0.0+) - Environment variable management
+
+All standard library features (JSON, CSV, threading, etc.) are included with Python.
+
+## Installation
+
+### For First-Time Users
+
+**1. Check Python Version**
+
+```bash
+python --version
+# or
+python3 --version
+```
+
+If Python is not installed or version is below 3.9, download from [python.org](https://www.python.org/downloads/)
+
+**2. Clone or Download Repository**
+
+```bash
+# Option A: Using git
+git clone <repository-url>
+cd substacker
+
+# Option B: Download ZIP
+# Extract the ZIP file and navigate to the folder
+cd substacker
+```
+
+**3. Create Virtual Environment (Recommended)**
+
+```bash
+# Create virtual environment
+python -m venv venv
+
+# Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+
+# On Windows:
+venv\Scripts\activate
+
+# You should see (venv) in your terminal prompt
+```
+
+**4. Install Dependencies**
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Get Your Substack Cookie
+Expected output:
+```
+Collecting requests>=2.31.0
+Collecting beautifulsoup4>=4.12.0
+Collecting python-dotenv>=1.0.0
+...
+Successfully installed beautifulsoup4-4.12.0 requests-2.31.0 python-dotenv-1.0.0
+```
 
-You'll need your browser's Substack session cookie. See the [detailed cookie guide](GETTING_STARTED.md#getting-your-substack-cookie) for step-by-step instructions for Chrome, Firefox, and Safari.
+### Quick Install (Advanced Users)
 
-**Quick method:**
+```bash
+python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+```
+
+## Quick Start
+
+**New to this?** Check out the [Complete Beginner's Guide](GETTING_STARTED.md) for detailed setup instructions with screenshots.
+
+### 1. Configure Environment
+
+```bash
+# Copy example environment file
+cp .env.example .env
+
+# Edit .env and add your credentials
+# SUBSTACK_USER="@yourusername"
+# SUBSTACK_COOKIE="paste_your_cookie_here"
+```
+
+**Quick method to get your cookie:**
 
 1. Log into [substack.com](https://substack.com)
 2. Press `F12` → Network tab
 3. Refresh page, click any request
 4. Copy the `Cookie` header value
 
-### 3. Configure Environment
+See the [detailed cookie guide](GETTING_STARTED.md#getting-your-substack-cookie) for step-by-step instructions for Chrome, Firefox, and Safari.
 
-```bash
-# Copy example environment file
-cp .env.example .env
-
-# Edit .env and add your cookie
-SUBSTACK_USER="@yourusername"
-SUBSTACK_COOKIE="paste_your_cookie_here"
-```
-
-### 4. Run the Scraper
+### 2. Run the Scraper
 
 ```bash
 # Basic usage
@@ -272,13 +342,6 @@ Total Publications: 50
 
 See [DATA_QUALITY_FEATURES.md](DATA_QUALITY_FEATURES.md) for details.
 
-## Requirements
-
-- Python 3.7+
-- requests >= 2.31.0
-- beautifulsoup4 >= 4.12.0
-- python-dotenv >= 1.0.0
-
 ## Security
 
 - **Environment Variables**: Sensitive credentials stored in `.env` (not committed)
@@ -287,37 +350,170 @@ See [DATA_QUALITY_FEATURES.md](DATA_QUALITY_FEATURES.md) for details.
 
 ## Troubleshooting
 
-### Authentication Errors
+### Installation Issues
+
+#### Python Version Too Old
+
+**Problem**: `SyntaxError` or features not working
+
+**Solution**:
+```bash
+# Check your Python version
+python --version
+
+# If below 3.9, download from python.org
+# Or use Python 3.9+ via pyenv, conda, etc.
+```
+
+#### ModuleNotFoundError
+
+**Problem**:
+```
+ModuleNotFoundError: No module named 'requests'
+ModuleNotFoundError: No module named 'bs4'
+ModuleNotFoundError: No module named 'dotenv'
+```
+
+**Solution**:
+```bash
+# Make sure you're in the virtual environment
+source venv/bin/activate  # macOS/Linux
+venv\Scripts\activate      # Windows
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Verify installation
+pip list | grep -E "requests|beautifulsoup4|python-dotenv"
+```
+
+#### Permission Denied
+
+**Problem**: `PermissionError` when installing packages
+
+**Solution**:
+```bash
+# Option 1: Use virtual environment (recommended)
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+# Option 2: Install for user only (not recommended)
+pip install --user -r requirements.txt
+```
+
+#### pip Command Not Found
+
+**Problem**: `bash: pip: command not found`
+
+**Solution**:
+```bash
+# Try pip3 instead
+pip3 install -r requirements.txt
+
+# Or use Python module syntax
+python -m pip install -r requirements.txt
+python3 -m pip install -r requirements.txt
+```
+
+### Runtime Issues
+
+#### Authentication Errors
 
 **Problem**: Scraper can't access your subscriptions
 
-**Solution**: Update your Substack cookie in `.env` (see ENV_CONFIGURATION.md)
+**Solution**:
+1. Get a fresh cookie from your browser
+2. Update `.env` file with new `SUBSTACK_COOKIE`
+3. Make sure you're logged into Substack in your browser
+4. See [ENV_CONFIGURATION.md](ENV_CONFIGURATION.md) for detailed cookie instructions
 
-### Missing Dependencies
+#### No .env File
 
-**Problem**: `ModuleNotFoundError`
+**Problem**: `SUBSTACK_USER not set in .env file`
 
-**Solution**: `pip install -r requirements.txt`
+**Solution**:
+```bash
+# Copy the example file
+cp .env.example .env
 
-### Slow Performance
+# Edit with your credentials
+nano .env  # or use any text editor
+```
+
+#### Empty Results
+
+**Problem**: Scraper runs but finds 0 publications
+
+**Possible Causes**:
+1. **Cookie expired**: Get a fresh cookie from your browser
+2. **Wrong URL**: Check that `SUBSTACK_USER` is correct in `.env`
+3. **No subscriptions**: Make sure you have subscriptions on Substack
+4. **Substack changed HTML**: File an issue on GitHub
+
+### Performance Issues
+
+#### Slow Performance
 
 **Problem**: Scraping takes too long
 
 **Solutions**:
+```bash
+# Increase parallel workers
+python substack_reads.py --workers 10
 
-- Increase workers: `--workers 10`
-- Enable caching: Remove `--no-cache`
-- Use parallel downloads: Remove `--no-parallel`
+# Enable caching (default, but verify you haven't disabled it)
+python substack_reads.py  # without --no-cache
 
-### Rate Limiting
+# Use parallel downloads (default)
+python substack_reads.py  # without --no-parallel
+```
 
-**Problem**: Getting 429 errors
+#### Rate Limiting / 429 Errors
+
+**Problem**: Getting 429 (Too Many Requests) errors
 
 **Solutions**:
+```bash
+# Reduce workers
+python substack_reads.py --workers 2
 
-- Reduce workers: `--workers 2`
-- Add delay: `--delay 2.0`
-- Use sequential downloads: `--no-parallel`
+# Add delay between requests
+python substack_reads.py --delay 2.0
+
+# Use sequential downloads
+python substack_reads.py --no-parallel
+```
+
+### Platform-Specific Issues
+
+#### Windows Path Issues
+
+**Problem**: File paths not working on Windows
+
+**Solution**: The app uses `pathlib` which handles cross-platform paths automatically. If you have issues, make sure you're using forward slashes in `.env` paths or use raw strings.
+
+#### macOS Certificate Errors
+
+**Problem**: SSL certificate verification failed
+
+**Solution**:
+```bash
+# Install certificates (Python 3.x)
+/Applications/Python\ 3.x/Install\ Certificates.command
+
+# Or update certifi
+pip install --upgrade certifi
+```
+
+### Getting Help
+
+If you're still having issues:
+
+1. **Check logs**: Run with `--log-level DEBUG --log-file debug.log`
+2. **Verify setup**: Make sure all installation steps were completed
+3. **Test dependencies**: Run `python -c "import requests, bs4, dotenv; print('OK')"`
+4. **File an issue**: Include Python version, OS, error messages, and debug logs
 
 ## Contributing
 
