@@ -88,7 +88,7 @@ def auto_label_publications(
     publications, analyze_content=True, skip_if_labeled=True, use_cache=True
 ):
     """Automatically assign labels based on publication characteristics"""
-    from definitions import KEYWORD_CATEGORIES
+    from .categories import KEYWORD_CATEGORIES
 
     progress = ProgressBar(len(publications), "Labeling")
 

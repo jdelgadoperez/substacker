@@ -9,6 +9,7 @@ import requests
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from .logger import get_logger
+from .config import Config
 
 logger = get_logger(__name__)
 
@@ -34,9 +35,10 @@ def sanitize_filename(filename):
     return filename
 
 
-def download_image(url, folder_path, filename=None, skip_if_exists=True):
+def download_image(url, folder_path, filename=None, skip_if_exists=True, timeout=None):
     """Download an image from URL - Returns tuple (file_path, was_cached)"""
-    from definitions import HEADERS
+    if timeout is None:
+        timeout = Config.timeout
 
     try:
         if not filename:
@@ -54,7 +56,7 @@ def download_image(url, folder_path, filename=None, skip_if_exists=True):
             else:
                 os.remove(file_path)
 
-        response = requests.get(url, headers=HEADERS, stream=True, timeout=10)
+        response = requests.get(url, headers=Config.get_headers(), stream=True, timeout=timeout)
         response.raise_for_status()
 
         with open(file_path, "wb") as f:

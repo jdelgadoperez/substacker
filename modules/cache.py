@@ -6,7 +6,7 @@ import os
 import hashlib
 import pickle
 from datetime import datetime, timedelta
-from .config import CACHE_DIR, CACHE_EXPIRY_DAYS
+from .config import Config, CACHE_EXPIRY_DAYS
 from .logger import get_logger
 
 logger = get_logger(__name__)
@@ -17,11 +17,14 @@ def get_cache_key(url):
     return hashlib.md5(url.encode()).hexdigest()
 
 
-def get_cached_metadata(url, cache_dir=CACHE_DIR):
+def get_cached_metadata(url, cache_dir=None):
     """
     Retrieve cached metadata for a URL if it exists and is not expired
     Returns None if cache miss or expired
     """
+    if cache_dir is None:
+        cache_dir = Config.cache_dir
+
     if not os.path.exists(cache_dir):
         return None
 
@@ -49,8 +52,11 @@ def get_cached_metadata(url, cache_dir=CACHE_DIR):
         return None
 
 
-def save_cached_metadata(url, metadata, cache_dir=CACHE_DIR):
+def save_cached_metadata(url, metadata, cache_dir=None):
     """Save metadata to cache"""
+    if cache_dir is None:
+        cache_dir = Config.cache_dir
+
     try:
         os.makedirs(cache_dir, exist_ok=True)
 
@@ -66,8 +72,11 @@ def save_cached_metadata(url, metadata, cache_dir=CACHE_DIR):
         logger.debug(f"Error writing cache: {e}")
 
 
-def clear_cache(cache_dir=CACHE_DIR):
+def clear_cache(cache_dir=None):
     """Clear the content analysis cache"""
+    if cache_dir is None:
+        cache_dir = Config.cache_dir
+
     if os.path.exists(cache_dir):
         import shutil
 

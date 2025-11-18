@@ -13,6 +13,7 @@ from .validation import validate_publication_data
 from .downloads import sanitize_filename, download_images_parallel
 from .metadata import extract_metadata
 from .logger import get_logger, ProgressBar
+from .config import Config
 
 logger = get_logger(__name__)
 
@@ -20,22 +21,26 @@ logger = get_logger(__name__)
 def scrape_substack_reads(
     url,
     download_images=True,
-    images_folder="images",
+    images_folder=None,
     extract_rich_metadata=False,
     validate_data=True,
     parallel_downloads=True,
-    max_workers=5,
+    max_workers=None,
 ):
     """
     Scrape a Substack reads page to extract publication data
     """
-    from definitions import HEADERS
+    # Use Config defaults if not provided
+    if images_folder is None:
+        images_folder = Config.images_folder
+    if max_workers is None:
+        max_workers = Config.max_workers
 
     if download_images:
-        Path(images_folder).mkdir(exist_ok=True)
+        Path(images_folder).mkdir(parents=True, exist_ok=True)
 
     try:
-        response = requests.get(url, headers=HEADERS)
+        response = requests.get(url, headers=Config.get_headers())
         response.raise_for_status()
 
         soup = BeautifulSoup(response.content, "html.parser")

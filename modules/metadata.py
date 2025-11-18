@@ -49,12 +49,10 @@ def fetch_author_bio(author_profile_url, max_retries=2, timeout=None, rate_limit
     if rate_limit_delay is None:
         rate_limit_delay = Config.rate_limit_delay
 
-    from definitions import HEADERS
-
     for attempt in range(max_retries):
         try:
             time.sleep(rate_limit_delay)
-            response = requests.get(author_profile_url, headers=HEADERS, timeout=timeout)
+            response = requests.get(author_profile_url, headers=Config.get_headers(), timeout=timeout)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.content, "html.parser")
@@ -159,9 +157,6 @@ def extract_metadata(
         if cached:
             return cached
 
-    # Import headers from parent
-    from definitions import HEADERS
-
     metadata = {
         "description": "",
         "subscriber_info": "",
@@ -173,7 +168,7 @@ def extract_metadata(
     for attempt in range(max_retries):
         try:
             time.sleep(rate_limit_delay)
-            response = requests.get(url, headers=HEADERS, timeout=timeout)
+            response = requests.get(url, headers=Config.get_headers(), timeout=timeout)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.content, "html.parser")

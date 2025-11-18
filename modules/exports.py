@@ -5,13 +5,17 @@ Data export module for CSV and JSON output.
 import os
 import json
 import csv
+from .config import Config
 
 
-def save_to_csv(data, filename="exports/substack_reads.csv"):
+def save_to_csv(data, filename=None):
     """Save the scraped data to a CSV file"""
     if not data:
         print("No data to save")
         return
+
+    if filename is None:
+        filename = os.path.join(Config.exports_folder, "substack_reads.csv")
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
@@ -49,8 +53,11 @@ def save_to_csv(data, filename="exports/substack_reads.csv"):
     print(f"✓ Data saved to {filename}")
 
 
-def save_to_json(data, filename="exports/substack_reads.json"):
+def save_to_json(data, filename=None):
     """Save the scraped data to a JSON file"""
+    if filename is None:
+        filename = os.path.join(Config.exports_folder, "substack_reads.json")
+
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
     with open(filename, "w", encoding="utf-8") as f:

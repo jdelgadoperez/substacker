@@ -6,7 +6,6 @@ Extract and analyze your Substack subscriptions with powerful CLI options.
 """
 
 import argparse
-from definitions import SUBSTACK_URL
 
 # Import all modules
 from modules.config import Config
@@ -54,12 +53,12 @@ Examples:
     )
 
     # Input/Output
-    parser.add_argument('--url', type=str, default=SUBSTACK_URL,
-                        help='Substack reads URL to scrape (default: from definitions.py)')
-    parser.add_argument('--images-folder', type=str, default='images',
-                        help='Folder to save downloaded images (default: images)')
-    parser.add_argument('--exports-folder', type=str, default='exports',
-                        help='Folder to save exported data (default: exports)')
+    parser.add_argument('--url', type=str, default=Config.get_substack_url(),
+                        help='Substack reads URL to scrape (default: from .env SUBSTACK_USER)')
+    parser.add_argument('--images-folder', type=str, default=None,
+                        help='Folder to save downloaded images (default: ~/projects/sandbox/exports/images)')
+    parser.add_argument('--exports-folder', type=str, default=None,
+                        help='Folder to save exported data (default: ~/projects/sandbox/exports)')
 
     # Features
     parser.add_argument('--no-images', action='store_true',
@@ -147,8 +146,11 @@ def main():
     Config.extract_metadata = args.metadata
     Config.validate_data = not args.no_validate
     Config.analyze_content = not args.no_content_analysis
-    Config.images_folder = args.images_folder
-    Config.exports_folder = args.exports_folder
+    # Only override config if user provided custom paths
+    if args.images_folder:
+        Config.images_folder = args.images_folder
+    if args.exports_folder:
+        Config.exports_folder = args.exports_folder
 
     # Parse label filters
     if args.include_labels:
