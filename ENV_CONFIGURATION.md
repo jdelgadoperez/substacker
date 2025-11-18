@@ -149,22 +149,31 @@ pip install -r requirements.txt
 
 ### Loading Environment Variables
 
-The `definitions.py` file automatically loads environment variables:
+The `modules/config.py` file automatically loads environment variables:
 
 ```python
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Load .env from the script's directory
-env_path = Path(__file__).parent / '.env'
+# Load .env from the project root directory
+PROJECT_ROOT = Path(__file__).parent.parent
+env_path = PROJECT_ROOT / ".env"
 load_dotenv(dotenv_path=env_path)
 
-# Use environment variables
-HEADERS = {
-    "User-Agent": "...",
-    "Cookie": os.getenv("SUBSTACK_COOKIE", ""),
-}
+# Config class with environment variables
+class Config:
+    substack_user: str = os.getenv("SUBSTACK_USER", "")
+    substack_cookie: str = os.getenv("SUBSTACK_COOKIE", "")
+
+    @classmethod
+    def get_headers(cls) -> dict:
+        return {
+            "User-Agent": "...",
+            "Cookie": cls.substack_cookie,
+        }
 ```
+
+**Note**: `definitions.py` is deprecated and maintained only for backward compatibility. New code should import from `modules.config`.
 
 ### Fallback Behavior
 
@@ -246,9 +255,13 @@ HEADERS = {
 
 **Environment Variable Approach** (recommended):
 ```python
-HEADERS = {
-    "Cookie": os.getenv("SUBSTACK_COOKIE", "")
-}
+# In modules/config.py
+class Config:
+    substack_cookie: str = os.getenv("SUBSTACK_COOKIE", "")
+
+    @classmethod
+    def get_headers(cls) -> dict:
+        return {"Cookie": cls.substack_cookie}
 ```
 
 **Benefits**:
@@ -256,3 +269,4 @@ HEADERS = {
 - Not committed to Git (`.env` is gitignored)
 - Easy to rotate (just update `.env`)
 - Secure and flexible
+- Centralized configuration management

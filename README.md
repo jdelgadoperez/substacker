@@ -149,12 +149,15 @@ images/
 ### Modular Design
 
 ```
-scrape/substack/
-├── substack_reads.py       # Main entry point (222 lines)
-├── definitions.py          # Configuration and constants
+substacker/
+├── substack_reads.py       # Main entry point (240 lines)
+├── definitions.py          # DEPRECATED: Backward compatibility shim
+├── .llm/
+│   └── plans/              # Implementation plans and design docs
 ├── modules/
+│   ├── config.py           # Unified configuration (env, network, features)
+│   ├── categories.py       # Keyword categories (40+ categories)
 │   ├── logger.py           # Logging and progress bars
-│   ├── config.py           # Global configuration
 │   ├── cache.py            # Content caching
 │   ├── validation.py       # Data validation
 │   ├── metadata.py         # Content extraction
@@ -168,8 +171,10 @@ scrape/substack/
 
 ### Key Benefits
 
-- **Lightweight main script**: 222 lines (orchestration only)
-- **9 focused modules** averaging ~100 lines each
+- **Lightweight main script**: 240 lines (orchestration only)
+- **Unified configuration**: All settings in `modules/config.py`
+- **Separated domain knowledge**: Categories in dedicated module
+- **10 focused modules** averaging ~100 lines each
 - **Clear separation of concerns**
 - **High reusability and testability**
 - **Easy to extend and maintain**
