@@ -209,10 +209,10 @@ def extract_metadata(
                         text = sibling.get_text(strip=True)
                         if text:
                             about_text.append(text)
-                        if len(about_text) >= 3:
+                        if len(about_text) >= 5:
                             break
                     if about_text:
-                        metadata["about_text"] = " ".join(about_text)[:500]
+                        metadata["about_text"] = " ".join(about_text)[:1500]
                         break
 
             # Extract content text for keyword analysis
@@ -225,26 +225,38 @@ def extract_metadata(
             if metadata["about_text"]:
                 content_text += f" {metadata['about_text']} "
 
-            content_selectors = [
-                "article",
-                ".post-content",
-                ".entry-content",
-                '[class*="post"]',
-                "main",
-                ".content",
-            ]
-            for selector in content_selectors:
-                elements = soup.select(selector)
-                for elem in elements[:3]:
-                    text = elem.get_text(strip=True, separator=" ")
-                    content_text += f" {text[:500]} "
-                    break
-
-            if len(content_text.strip()) < 100:
-                for script in soup(["script", "style", "nav", "footer", "header"]):
-                    script.decompose()
+            # For Substack pages, aggressively extract ALL visible text
+            # since keywords often appear in post previews, tags, etc.
+            if "substack.com" in url.lower():
+                # Remove script, style, nav, footer, header
+                for tag in soup(["script", "style", "nav", "footer", "header"]):
+                    tag.decompose()
+                # Get all visible text from the page
                 body_text = soup.get_text(strip=True, separator=" ")
-                content_text += f" {body_text[:1000]} "
+                content_text += f" {body_text[:5000]} "  # Get first 5000 chars
+                logger.debug(f"Extracted {len(body_text)} chars from Substack page")
+            else:
+                # For non-Substack pages, use selective extraction
+                content_selectors = [
+                    "article",
+                    ".post-content",
+                    ".entry-content",
+                    '[class*="post"]',
+                    "main",
+                    ".content",
+                ]
+                for selector in content_selectors:
+                    elements = soup.select(selector)
+                    for elem in elements[:5]:
+                        text = elem.get_text(strip=True, separator=" ")
+                        content_text += f" {text[:1000]} "
+                        break
+
+                if len(content_text.strip()) < 100:
+                    for script in soup(["script", "style", "nav", "footer", "header"]):
+                        script.decompose()
+                    body_text = soup.get_text(strip=True, separator=" ")
+                    content_text += f" {body_text[:3000]} "
 
             metadata["content_text"] = content_text.lower()
 

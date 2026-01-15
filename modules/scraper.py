@@ -18,6 +18,29 @@ from .config import Config
 logger = get_logger(__name__)
 
 
+def normalize_substack_url(url):
+    """
+    Convert Substack profile URLs to publication homepage URLs.
+
+    Converts: https://substack.com/@username
+    To: https://username.substack.com/
+    """
+    if not url:
+        return url
+
+    # Check if this is a profile URL pattern
+    profile_pattern = r'https://substack\.com/@([^/]+)'
+    match = re.match(profile_pattern, url)
+
+    if match:
+        username = match.group(1)
+        # Convert to publication homepage
+        return f'https://{username}.substack.com/'
+
+    # Return URL as-is if it's already in the correct format
+    return url
+
+
 def scrape_substack_reads(
     url,
     download_images=True,
@@ -60,7 +83,7 @@ def scrape_substack_reads(
             pub_data = {}
 
             if link.get("href"):
-                pub_data["link"] = link["href"]
+                pub_data["link"] = normalize_substack_url(link["href"])
 
             name_elem = link.find("div", class_=re.compile(r"weight-semibold-\w+"))
             if name_elem:

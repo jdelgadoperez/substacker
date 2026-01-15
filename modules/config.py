@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Optional
 
 # Load environment variables from .env file
+
 try:
     from dotenv import load_dotenv
 
@@ -62,8 +63,12 @@ class Config:
     cache_dir: str = str(PROJECT_ROOT / ".cache")
 
     # === Label Filtering ===
-    include_labels: Optional[list[str]] = None  # None = all labels, or list of labels to include
-    exclude_labels: Optional[list[str]] = None  # None = no exclusions, or list of labels to exclude
+    include_labels: Optional[list[str]] = (
+        None  # None = all labels, or list of labels to include
+    )
+    exclude_labels: Optional[list[str]] = (
+        None  # None = no exclusions, or list of labels to exclude
+    )
 
     # === Cache Settings ===
     cache_expiry_days: int = 7  # Content cache expires after 7 days
@@ -122,7 +127,9 @@ class Config:
             issues.append(f"timeout must be >= 1, got {cls.timeout}")
 
         if cls.cache_expiry_days < 0:
-            issues.append(f"cache_expiry_days must be >= 0, got {cls.cache_expiry_days}")
+            issues.append(
+                f"cache_expiry_days must be >= 0, got {cls.cache_expiry_days}"
+            )
 
         return issues
 
