@@ -60,41 +60,18 @@ cd substacker
 cd substacker
 ```
 
-**3. Create Virtual Environment (Recommended)**
+**3. Install Dependencies**
 
 ```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-# On macOS/Linux:
-source venv/bin/activate
-
-# On Windows:
-venv\Scripts\activate
-
-# You should see (venv) in your terminal prompt
+uv sync
 ```
 
-**4. Install Dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-Expected output:
-```
-Collecting requests>=2.31.0
-Collecting beautifulsoup4>=4.12.0
-Collecting python-dotenv>=1.0.0
-...
-Successfully installed beautifulsoup4-4.12.0 requests-2.31.0 python-dotenv-1.0.0
-```
+This creates a virtual environment and installs all dependencies from `pyproject.toml` automatically.
 
 ### Quick Install (Advanced Users)
 
 ```bash
-python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
+uv sync
 ```
 
 ## Quick Start
@@ -376,15 +353,11 @@ ModuleNotFoundError: No module named 'dotenv'
 
 **Solution**:
 ```bash
-# Make sure you're in the virtual environment
-source venv/bin/activate  # macOS/Linux
-venv\Scripts\activate      # Windows
-
-# Install dependencies
-pip install -r requirements.txt
+# Install dependencies (creates virtual environment automatically)
+uv sync
 
 # Verify installation
-pip list | grep -E "requests|beautifulsoup4|python-dotenv"
+uv pip list | grep -E "requests|beautifulsoup4|python-dotenv"
 ```
 
 #### Permission Denied
@@ -393,27 +366,8 @@ pip list | grep -E "requests|beautifulsoup4|python-dotenv"
 
 **Solution**:
 ```bash
-# Option 1: Use virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-
-# Option 2: Install for user only (not recommended)
-pip install --user -r requirements.txt
-```
-
-#### pip Command Not Found
-
-**Problem**: `bash: pip: command not found`
-
-**Solution**:
-```bash
-# Try pip3 instead
-pip3 install -r requirements.txt
-
-# Or use Python module syntax
-python -m pip install -r requirements.txt
-python3 -m pip install -r requirements.txt
+# uv handles virtual environments automatically
+uv sync
 ```
 
 ### Runtime Issues
