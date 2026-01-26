@@ -56,10 +56,15 @@ class Config:
     validate_data: bool = True
     analyze_content: bool = True
 
+    # === RSS/OPML Settings ===
+    include_rss: bool = False  # Include RSS URLs in exports
+    export_opml: bool = False  # Export OPML file for feed readers
+    opml_filename: str = "substack_feeds.opml"  # Default OPML filename
+
     # === Output Paths (derived from project root) ===
     project_root: Path = PROJECT_ROOT
-    images_folder: str = os.path.expanduser("~/projects/sandbox/exports/images")
-    exports_folder: str = os.path.expanduser("~/projects/sandbox/exports")
+    images_folder: str = os.path.expanduser("~/projects/sandbox/outputs/images")
+    exports_folder: str = os.path.expanduser("~/projects/sandbox/outputs")
     cache_dir: str = str(PROJECT_ROOT / ".cache")
 
     # === Label Filtering ===

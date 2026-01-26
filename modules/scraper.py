@@ -41,6 +41,41 @@ def normalize_substack_url(url):
     return url
 
 
+def extract_rss_url(publication_link):
+    """
+    Extract RSS feed URL from Substack publication link.
+
+    Substack RSS feeds follow the pattern: https://{subdomain}.substack.com/feed
+
+    Handles:
+    - https://example.substack.com → https://example.substack.com/feed
+    - https://substack.com/@example → https://example.substack.com/feed
+    - Custom domains are returned as-is with /feed appended
+
+    Args:
+        publication_link: The publication's homepage URL
+
+    Returns:
+        str: The RSS feed URL, or None if URL is invalid
+    """
+    if not publication_link:
+        return None
+
+    # First normalize the URL (handles @username format)
+    normalized = normalize_substack_url(publication_link)
+    if not normalized:
+        return None
+
+    # Parse the URL
+    parsed = urlparse(normalized)
+
+    # Remove trailing slash and any path components
+    base_url = f"{parsed.scheme}://{parsed.netloc}"
+
+    # Append /feed to get RSS URL
+    return f"{base_url}/feed"
+
+
 def scrape_substack_reads(
     url,
     download_images=True,
