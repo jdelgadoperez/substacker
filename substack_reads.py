@@ -11,7 +11,8 @@ import argparse
 from modules.config import Config
 from modules.cache import clear_cache
 from modules.scraper import scrape_substack_reads, extract_rss_url
-from modules.labeling import auto_label_publications, filter_labels
+from modules.ai_labeling import categorize_with_claude
+from modules.labeling import filter_labels
 from modules.exports import save_to_json, save_to_csv, save_to_opml
 from modules.reports import generate_data_quality_report, print_data_quality_report, print_results
 from modules.logger import setup_logging, get_logger
@@ -216,14 +217,12 @@ def main():
         logger.error("No publications found or error occurred during scraping.")
         return 1
 
-    # Auto-label publications
-    if Config.analyze_content and not args.quiet:
-        logger.info("Auto-labeling publications...")
-    publications = auto_label_publications(
+    # Categorize publications with AI
+    if not args.quiet:
+        logger.info("Categorizing publications with AI...")
+    publications = categorize_with_claude(
         publications,
-        analyze_content=Config.analyze_content,
         skip_if_labeled=Config.skip_if_labeled,
-        use_cache=Config.use_cache
     )
 
     # Apply label filtering
