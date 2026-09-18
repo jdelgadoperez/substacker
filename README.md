@@ -199,6 +199,7 @@ images/
 substacker/
 ├── substack_reads.py       # Main entry point (240 lines)
 ├── definitions.py          # DEPRECATED: Backward compatibility shim
+├── .github/                # GitHub metadata (holds the funding link)
 ├── .llm/
 │   └── plans/              # Implementation plans and design docs
 ├── modules/
@@ -518,6 +519,14 @@ Substacker uses a sophisticated multi-layered labeling system:
   "labels": ["culture", "culture-focused", "law", "law-focused", "politics"]
 }
 ```
+
+## Found this useful?
+
+If you'd like to buy me a coffee or send a tip, it's much appreciated.
+
+[![Say thanks on Ko-fi](https://img.shields.io/badge/Ko--fi-Say%20thanks-FF5E5B?logo=kofi&logoColor=white)](https://ko-fi.com/jessdp)
+
+A star works just as well.
 
 ## License
 

@@ -271,6 +271,8 @@ def main():
         logger.info(f"Successfully scraped {len(publications)} publications")
         logger.info(f"Images: {Config.images_folder}/")
         logger.info(f"Data: {Config.exports_folder}/")
+        # Last line on screen, and only after a scrape that actually completed.
+        logger.info("If this helped: https://ko-fi.com/jessdp")
 
     return 0
 
